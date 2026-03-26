@@ -2,18 +2,18 @@ import gradio as gr
 from modules.auth_gradio import login_fn
 
 
-# ===== MOCK TAB (TẠM THỜI - ĐỂ BẠN THẤY UI HOẠT ĐỘNG) =====
+# ===== MOCK FUNCTIONS (để test UI trước) =====
 def download_ui():
-    return "📥 Module Download (sẽ gắn logic sau)"
+    return "📥 Download module hoạt động"
 
 def chunking_ui():
-    return "🧩 Module Chunking"
+    return "🧩 Chunking module hoạt động"
 
 def qa_ui():
-    return "💬 Module QA"
+    return "💬 QA module hoạt động"
 
 def report_ui():
-    return "📊 Module Report"
+    return "📊 Report module hoạt động"
 
 
 # ===== MAIN APP =====
@@ -22,11 +22,11 @@ def main_app(username, role):
 ### 🎉 Xin chào {username}
 👤 **Role:** `{role}`  
 ---
-🚀 Chọn chức năng bên dưới
+🚀 Chọn tab bên dưới để sử dụng hệ thống
 """
 
 
-# ===== LOGIN HANDLER =====
+# ===== LOGIN =====
 def handle_login(u, p):
     msg, ok, username, role, groups, menus = login_fn(u, p)
 
@@ -44,6 +44,7 @@ def handle_login(u, p):
         msg,
         None,
         None,
+        None,
         gr.update(visible=True),
         gr.update(visible=False),
     )
@@ -55,6 +56,7 @@ def handle_logout():
         "🔓 Đã đăng xuất",
         None,
         None,
+        None,
         gr.update(visible=True),
         gr.update(visible=False),
         "⚠️ Vui lòng đăng nhập"
@@ -64,6 +66,7 @@ def handle_logout():
 # ===== APP =====
 with gr.Blocks() as app:
 
+    # ===== STATE =====
     state_user = gr.State(None)
     state_role = gr.State(None)
     state_menus = gr.State(None)
@@ -75,7 +78,7 @@ with gr.Blocks() as app:
 ---
 """)
 
-    # ===== LOGIN =====
+    # ===== LOGIN UI =====
     with gr.Row():
         gr.Column(scale=1)
 
@@ -90,7 +93,7 @@ with gr.Blocks() as app:
 
         gr.Column(scale=1)
 
-    # ===== MAIN APP =====
+    # ===== MAIN UI =====
     with gr.Column(visible=False) as app_box:
 
         with gr.Row():
@@ -104,25 +107,26 @@ with gr.Blocks() as app:
 
         main_output = gr.Markdown()
 
-        # 🔥 TAB THỰC SỰ (ĐÂY LÀ PHẦN BẠN THIẾU)
+        # ===== TABS =====
         with gr.Tabs():
 
             with gr.Tab("📥 Download"):
-                download_tab(state_logged_in, state_menus)
+                gr.Markdown(download_ui())
 
             with gr.Tab("🧩 Chunking"):
-                chunking_tab(state_logged_in, state_menus)
+                gr.Markdown(chunking_ui())
 
             with gr.Tab("💬 QA"):
-                qa_tab(state_logged_in, state_menus, state_groups)
+                gr.Markdown(qa_ui())
 
             with gr.Tab("📊 Report"):
-                report_tab(state_logged_in, state_menus)
+                gr.Markdown(report_ui())
+
     # ===== EVENTS =====
     login_btn.click(
         handle_login,
         inputs=[username, password],
-        outputs=[login_msg, state_user, state_role, login_box, app_box]
+        outputs=[login_msg, state_user, state_role, state_menus, login_box, app_box]
     ).then(
         main_app,
         inputs=[state_user, state_role],
@@ -136,7 +140,7 @@ with gr.Blocks() as app:
     logout_btn.click(
         handle_logout,
         inputs=[],
-        outputs=[login_msg, state_user, state_role, login_box, app_box, main_output]
+        outputs=[login_msg, state_user, state_role, state_menus, login_box, app_box, main_output]
     )
 
 
