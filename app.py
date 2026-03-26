@@ -14,7 +14,7 @@ def main_app(username, role):
 """
 
 
-# ===== LOGIN HANDLER (FIX LỖI CHÍNH) =====
+# ===== LOGIN HANDLER =====
 def handle_login(u, p):
     msg, ok, username, role, groups, menus = login_fn(u, p)
 
@@ -49,29 +49,20 @@ def handle_logout():
 
 
 # ===== APP =====
-with gr.Blocks(
-    theme=gr.themes.Soft(
-        primary_hue="blue",
-        secondary_hue="indigo",
-        radius_size="lg"
-    ),
-    title="RAG System"
-) as app:
+with gr.Blocks() as app:
 
     # ===== STATE =====
     state_user = gr.State(None)
     state_role = gr.State(None)
 
     # ===== HEADER =====
-    gr.Markdown(
-        """
+    gr.Markdown("""
 # 📚 Hệ thống RAG Pháp Luật  
 ### 🚀 Retrieval Augmented Generation System
 ---
-"""
-    )
+""")
 
-    # ===== LOGIN BOX (CENTERED) =====
+    # ===== LOGIN BOX =====
     with gr.Row():
         with gr.Column(scale=1):
             pass
@@ -82,8 +73,7 @@ with gr.Blocks(
 
             username = gr.Textbox(
                 label="Tên tài khoản",
-                placeholder="Nhập username...",
-                scale=1
+                placeholder="Nhập username..."
             )
 
             password = gr.Textbox(
@@ -92,12 +82,7 @@ with gr.Blocks(
                 placeholder="Nhập password..."
             )
 
-            login_btn = gr.Button(
-                "🚀 Đăng nhập",
-                variant="primary",
-                size="lg"
-            )
-
+            login_btn = gr.Button("🚀 Đăng nhập", variant="primary")
             login_msg = gr.Markdown()
 
         with gr.Column(scale=1):
@@ -107,20 +92,21 @@ with gr.Blocks(
     with gr.Column(visible=False) as app_box:
 
         with gr.Row():
-            user_info = gr.Markdown(scale=8)
-            logout_btn = gr.Button("Đăng xuất", variant="secondary", scale=1)
+            with gr.Column(scale=8):
+                user_info = gr.Markdown()
+
+            with gr.Column(scale=1):
+                logout_btn = gr.Button("Đăng xuất", variant="secondary")
 
         gr.Markdown("---")
 
         main_output = gr.Markdown()
 
-        # Placeholder (sau này gắn tabs)
         with gr.Box():
             gr.Markdown("### 📊 Dashboard RAG")
             gr.Markdown("👉 Các chức năng sẽ hiển thị tại đây")
 
     # ===== EVENTS =====
-
     login_btn.click(
         handle_login,
         inputs=[username, password],
@@ -142,4 +128,5 @@ with gr.Blocks(
     )
 
 
-app.launch()
+# ⚠️ FIX GRADIO 6 (theme phải đặt ở launch)
+app.launch(theme=gr.themes.Soft())
