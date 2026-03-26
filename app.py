@@ -62,10 +62,9 @@ with gr.Blocks() as app:
 ---
 """)
 
-    # ===== LOGIN BOX =====
+    # ===== LOGIN BOX (CENTER) =====
     with gr.Row():
-        with gr.Column(scale=1):
-            pass
+        gr.Column(scale=1)
 
         with gr.Column(scale=2, min_width=400) as login_box:
 
@@ -73,20 +72,18 @@ with gr.Blocks() as app:
 
             username = gr.Textbox(
                 label="Tên tài khoản",
-                placeholder="Nhập username..."
+                placeholder="admin"
             )
 
             password = gr.Textbox(
                 label="Mật khẩu",
-                type="password",
-                placeholder="Nhập password..."
+                type="password"
             )
 
             login_btn = gr.Button("🚀 Đăng nhập", variant="primary")
             login_msg = gr.Markdown()
 
-        with gr.Column(scale=1):
-            pass
+        gr.Column(scale=1)
 
     # ===== MAIN APP =====
     with gr.Column(visible=False) as app_box:
@@ -96,15 +93,15 @@ with gr.Blocks() as app:
                 user_info = gr.Markdown()
 
             with gr.Column(scale=1):
-                logout_btn = gr.Button("Đăng xuất", variant="secondary")
+                logout_btn = gr.Button("Đăng xuất")
 
         gr.Markdown("---")
 
         main_output = gr.Markdown()
 
-        with gr.Box():
-            gr.Markdown("### 📊 Dashboard RAG")
-            gr.Markdown("👉 Các chức năng sẽ hiển thị tại đây")
+        # Dashboard placeholder
+        gr.Markdown("### 📊 Dashboard RAG")
+        gr.Markdown("👉 Các chức năng sẽ hiển thị tại đây")
 
     # ===== EVENTS =====
     login_btn.click(
@@ -128,5 +125,5 @@ with gr.Blocks() as app:
     )
 
 
-# ⚠️ FIX GRADIO 6 (theme phải đặt ở launch)
+# ⚠️ Theme đặt ở launch (compatible mọi version)
 app.launch(theme=gr.themes.Soft())
