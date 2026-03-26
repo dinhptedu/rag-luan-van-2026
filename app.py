@@ -108,19 +108,61 @@ with gr.Blocks() as app:
         main_output = gr.Markdown()
 
         # ===== TABS =====
-        with gr.Tabs():
+    with gr.Tab("📥 Download"):
+    
+        gr.Markdown("## 📥 Module Download")
+    
+        download_output = gr.Markdown("👉 Nhấn nút để chạy")
+    
+        download_btn = gr.Button("🚀 Run Download")
+    
+        download_btn.click(
+            download_ui,
+            inputs=None,
+            outputs=download_output
+        )
 
-            with gr.Tab("📥 Download"):
-                gr.Markdown(download_ui())
+    with gr.Tab("🧩 Chunking"):
+    
+        gr.Markdown("## 🧩 Chunking")
+    
+        chunk_output = gr.Markdown("👉 Nhấn nút để chạy")
+    
+        chunk_btn = gr.Button("🚀 Run Chunking")
+    
+        chunk_btn.click(
+            chunking_ui,
+            None,
+            chunk_output
+        )
 
-            with gr.Tab("🧩 Chunking"):
-                gr.Markdown(chunking_ui())
+    with gr.Tab("🧩 Chunking"):
+    
+        gr.Markdown("## 🧩 Chunking")
+    
+        chunk_output = gr.Markdown("👉 Nhấn nút để chạy")
+    
+        chunk_btn = gr.Button("🚀 Run Chunking")
+    
+        chunk_btn.click(
+            chunking_ui,
+            None,
+            chunk_output
+        )
 
-            with gr.Tab("💬 QA"):
-                gr.Markdown(qa_ui())
+    with gr.Tab("💬 QA"):
 
-            with gr.Tab("📊 Report"):
-                gr.Markdown(report_ui())
+    gr.Markdown("## 💬 QA")
+
+    qa_output = gr.Markdown("👉 Nhấn nút để chạy")
+
+    qa_btn = gr.Button("🚀 Run QA")
+
+    qa_btn.click(
+        qa_ui,
+        None,
+        qa_output
+    )
 
     # ===== EVENTS =====
     login_btn.click(
