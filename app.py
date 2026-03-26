@@ -2,7 +2,7 @@ import gradio as gr
 from modules.auth_gradio import login_fn
 
 
-# ===== MOCK FUNCTIONS (để test UI trước) =====
+# ===== MOCK FUNCTIONS =====
 def download_ui():
     return "📥 Download module hoạt động"
 
@@ -66,19 +66,17 @@ def handle_logout():
 # ===== APP =====
 with gr.Blocks() as app:
 
-    # ===== STATE =====
     state_user = gr.State(None)
     state_role = gr.State(None)
     state_menus = gr.State(None)
 
-    # ===== HEADER =====
     gr.Markdown("""
 # 📚 Hệ thống RAG Pháp Luật  
 ### 🚀 Retrieval Augmented Generation System
 ---
 """)
 
-    # ===== LOGIN UI =====
+    # ===== LOGIN =====
     with gr.Row():
         gr.Column(scale=1)
 
@@ -93,76 +91,56 @@ with gr.Blocks() as app:
 
         gr.Column(scale=1)
 
-    # ===== MAIN UI =====
+    # ===== MAIN APP =====
     with gr.Column(visible=False) as app_box:
 
         with gr.Row():
             with gr.Column(scale=8):
                 user_info = gr.Markdown()
-
             with gr.Column(scale=1):
                 logout_btn = gr.Button("Đăng xuất")
 
         gr.Markdown("---")
-
         main_output = gr.Markdown()
 
-        # ===== TABS =====
-    with gr.Tab("📥 Download"):
-    
-        gr.Markdown("## 📥 Module Download")
-    
-        download_output = gr.Markdown("👉 Nhấn nút để chạy")
-    
-        download_btn = gr.Button("🚀 Run Download")
-    
-        download_btn.click(
-            download_ui,
-            inputs=None,
-            outputs=download_output
-        )
+        # ===== TABS (ĐÚNG CHUẨN) =====
+        with gr.Tabs():
 
-    with gr.Tab("🧩 Chunking"):
-    
-        gr.Markdown("## 🧩 Chunking")
-    
-        chunk_output = gr.Markdown("👉 Nhấn nút để chạy")
-    
-        chunk_btn = gr.Button("🚀 Run Chunking")
-    
-        chunk_btn.click(
-            chunking_ui,
-            None,
-            chunk_output
-        )
+            # ===== DOWNLOAD =====
+            with gr.Tab("📥 Download"):
+                gr.Markdown("## 📥 Module Download")
 
-    with gr.Tab("🧩 Chunking"):
-    
-        gr.Markdown("## 🧩 Chunking")
-    
-        chunk_output = gr.Markdown("👉 Nhấn nút để chạy")
-    
-        chunk_btn = gr.Button("🚀 Run Chunking")
-    
-        chunk_btn.click(
-            chunking_ui,
-            None,
-            chunk_output
-        )
+                download_output = gr.Markdown("👉 Nhấn nút để chạy")
+                gr.Button("🚀 Run Download").click(
+                    download_ui, None, download_output
+                )
 
-    with gr.Tab("💬 QA"):
+            # ===== CHUNKING =====
+            with gr.Tab("🧩 Chunking"):
+                gr.Markdown("## 🧩 Chunking")
 
-    gr.Markdown("## 💬 QA")
+                chunk_output = gr.Markdown("👉 Nhấn nút để chạy")
+                gr.Button("🚀 Run Chunking").click(
+                    chunking_ui, None, chunk_output
+                )
 
-    qa_output = gr.Markdown("👉 Nhấn nút để chạy")
+            # ===== QA =====
+            with gr.Tab("💬 QA"):
+                gr.Markdown("## 💬 QA")
 
-    qa_btn = gr.Button("🚀 Run QA")
+                qa_output = gr.Markdown("👉 Nhấn nút để chạy")
+                gr.Button("🚀 Run QA").click(
+                    qa_ui, None, qa_output
+                )
 
-    qa_btn.click(
-        qa_ui,
-        None,
-        qa_output
-    )
+            # ===== REPORT =====
+            with gr.Tab("📊 Report"):
+                gr.Markdown("## 📊 Report")
+
+                report_output = gr.Markdown("👉 Nhấn nút để chạy")
+                gr.Button("🚀 Run Report").click(
+                    report_ui, None, report_output
+                )
 
     # ===== EVENTS =====
     login_btn.click(
