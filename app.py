@@ -65,6 +65,7 @@ with gr.Blocks() as app:
 
     state_user = gr.State(None)
     state_role = gr.State(None)
+    state_menus = gr.State(None)
 
     # ===== HEADER =====
     gr.Markdown("""
