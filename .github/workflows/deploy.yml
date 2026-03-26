@@ -18,13 +18,14 @@ jobs:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: |
           git config --global user.email "you@example.com"
-          git config --global user.name "yourname"
+          git config --global user.name "Dinhpt"
 
-          git clone https://huggingface.co/spaces/Dinhpt/rag-luan-van-2026 space
+          git clone https://Dinhpt:$HF_TOKEN@huggingface.co/spaces/Dinhpt/rag-luan-van-2026 space
 
-          rsync -av --exclude '.git' ./ space/
+          rsync -av --exclude='.git' ./ space/
 
           cd space
           git add .
-          git commit -m "auto deploy"
+          git commit -m "auto deploy" || echo "no changes"
+
           git push https://Dinhpt:$HF_TOKEN@huggingface.co/spaces/Dinhpt/rag-luan-van-2026 main
