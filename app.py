@@ -5,29 +5,30 @@ from modules.auth_gradio import login_fn
 # ===== MAIN APP =====
 def main_app(username, role):
     return f"""
-    ## 🎉 Xin chào {username}
-    
-    👤 Role: **{role}**
-    
-    👉 Chọn chức năng bên dưới để bắt đầu hệ thống RAG.
-    """
+### 🎉 Xin chào {username}
+
+👤 **Role:** `{role}`  
+
+---
+🚀 Chọn chức năng để bắt đầu hệ thống RAG
+"""
 
 
-# ===== LOGIN HANDLER =====
+# ===== LOGIN HANDLER (FIX LỖI CHÍNH) =====
 def handle_login(u, p):
-    ok, role = login_fn(u, p)
+    msg, ok, username, role, groups, menus = login_fn(u, p)
 
     if ok:
         return (
-            "✅ Đăng nhập thành công",
-            u,
+            msg,
+            username,
             role,
-            gr.update(visible=False),   # hide login box
-            gr.update(visible=True),    # show app
+            gr.update(visible=False),
+            gr.update(visible=True),
         )
 
     return (
-        "❌ Sai tài khoản hoặc mật khẩu",
+        msg,
         None,
         None,
         gr.update(visible=True),
@@ -48,7 +49,14 @@ def handle_logout():
 
 
 # ===== APP =====
-with gr.Blocks(theme=gr.themes.Soft(), title="RAG System") as app:
+with gr.Blocks(
+    theme=gr.themes.Soft(
+        primary_hue="blue",
+        secondary_hue="indigo",
+        radius_size="lg"
+    ),
+    title="RAG System"
+) as app:
 
     # ===== STATE =====
     state_user = gr.State(None)
@@ -57,36 +65,59 @@ with gr.Blocks(theme=gr.themes.Soft(), title="RAG System") as app:
     # ===== HEADER =====
     gr.Markdown(
         """
-        # 📚 Hệ thống RAG Pháp Luật  
-        ### 🚀 Retrieval Augmented Generation System
-        """
+# 📚 Hệ thống RAG Pháp Luật  
+### 🚀 Retrieval Augmented Generation System
+---
+"""
     )
 
-    # ===== LOGIN BOX =====
-    with gr.Column(visible=True) as login_box:
+    # ===== LOGIN BOX (CENTERED) =====
+    with gr.Row():
+        with gr.Column(scale=1):
+            pass
 
-        gr.Markdown("## 🔐 Đăng nhập")
+        with gr.Column(scale=2, min_width=400) as login_box:
 
-        username = gr.Textbox(label="Tên tài khoản", placeholder="admin")
-        password = gr.Textbox(label="Mật khẩu", type="password")
+            gr.Markdown("## 🔐 Đăng nhập hệ thống")
 
-        login_btn = gr.Button("Đăng nhập", variant="primary")
+            username = gr.Textbox(
+                label="Tên tài khoản",
+                placeholder="Nhập username...",
+                scale=1
+            )
 
-        login_msg = gr.Markdown()
+            password = gr.Textbox(
+                label="Mật khẩu",
+                type="password",
+                placeholder="Nhập password..."
+            )
+
+            login_btn = gr.Button(
+                "🚀 Đăng nhập",
+                variant="primary",
+                size="lg"
+            )
+
+            login_msg = gr.Markdown()
+
+        with gr.Column(scale=1):
+            pass
 
     # ===== MAIN APP =====
     with gr.Column(visible=False) as app_box:
 
         with gr.Row():
-            user_info = gr.Markdown()
-            logout_btn = gr.Button("Đăng xuất", variant="secondary")
+            user_info = gr.Markdown(scale=8)
+            logout_btn = gr.Button("Đăng xuất", variant="secondary", scale=1)
 
         gr.Markdown("---")
 
         main_output = gr.Markdown()
 
-        # 👉 chỗ này sau này bạn gắn tabs RAG vào
-        gr.Markdown("### 📊 Các chức năng sẽ hiển thị tại đây")
+        # Placeholder (sau này gắn tabs)
+        with gr.Box():
+            gr.Markdown("### 📊 Dashboard RAG")
+            gr.Markdown("👉 Các chức năng sẽ hiển thị tại đây")
 
     # ===== EVENTS =====
 
@@ -99,7 +130,7 @@ with gr.Blocks(theme=gr.themes.Soft(), title="RAG System") as app:
         inputs=[state_user, state_role],
         outputs=main_output
     ).then(
-        lambda u, r: f"👤 **{u}** | Role: `{r}`",
+        lambda u, r: f"👤 **{u}** | `{r}`",
         inputs=[state_user, state_role],
         outputs=user_info
     )
@@ -109,5 +140,6 @@ with gr.Blocks(theme=gr.themes.Soft(), title="RAG System") as app:
         inputs=[],
         outputs=[login_msg, state_user, state_role, login_box, app_box, main_output]
     )
+
 
 app.launch()
