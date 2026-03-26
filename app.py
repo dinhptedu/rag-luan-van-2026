@@ -2,15 +2,27 @@ import gradio as gr
 from modules.auth_gradio import login_fn
 
 
+# ===== MOCK TAB (TẠM THỜI - ĐỂ BẠN THẤY UI HOẠT ĐỘNG) =====
+def download_ui():
+    return "📥 Module Download (sẽ gắn logic sau)"
+
+def chunking_ui():
+    return "🧩 Module Chunking"
+
+def qa_ui():
+    return "💬 Module QA"
+
+def report_ui():
+    return "📊 Module Report"
+
+
 # ===== MAIN APP =====
 def main_app(username, role):
     return f"""
 ### 🎉 Xin chào {username}
-
 👤 **Role:** `{role}`  
-
 ---
-🚀 Chọn chức năng để bắt đầu hệ thống RAG
+🚀 Chọn chức năng bên dưới
 """
 
 
@@ -51,7 +63,6 @@ def handle_logout():
 # ===== APP =====
 with gr.Blocks() as app:
 
-    # ===== STATE =====
     state_user = gr.State(None)
     state_role = gr.State(None)
 
@@ -62,23 +73,15 @@ with gr.Blocks() as app:
 ---
 """)
 
-    # ===== LOGIN BOX (CENTER) =====
+    # ===== LOGIN =====
     with gr.Row():
         gr.Column(scale=1)
 
         with gr.Column(scale=2, min_width=400) as login_box:
+            gr.Markdown("## 🔐 Đăng nhập")
 
-            gr.Markdown("## 🔐 Đăng nhập hệ thống")
-
-            username = gr.Textbox(
-                label="Tên tài khoản",
-                placeholder="admin"
-            )
-
-            password = gr.Textbox(
-                label="Mật khẩu",
-                type="password"
-            )
+            username = gr.Textbox(label="Tên tài khoản", placeholder="admin")
+            password = gr.Textbox(label="Mật khẩu", type="password")
 
             login_btn = gr.Button("🚀 Đăng nhập", variant="primary")
             login_msg = gr.Markdown()
@@ -99,9 +102,24 @@ with gr.Blocks() as app:
 
         main_output = gr.Markdown()
 
-        # Dashboard placeholder
-        gr.Markdown("### 📊 Dashboard RAG")
-        gr.Markdown("👉 Các chức năng sẽ hiển thị tại đây")
+        # 🔥 TAB THỰC SỰ (ĐÂY LÀ PHẦN BẠN THIẾU)
+        with gr.Tabs():
+
+            with gr.Tab("📥 Download"):
+                download_box = gr.Markdown()
+                gr.Button("Load").click(download_ui, None, download_box)
+
+            with gr.Tab("🧩 Chunking"):
+                chunk_box = gr.Markdown()
+                gr.Button("Load").click(chunking_ui, None, chunk_box)
+
+            with gr.Tab("💬 QA"):
+                qa_box = gr.Markdown()
+                gr.Button("Load").click(qa_ui, None, qa_box)
+
+            with gr.Tab("📊 Report"):
+                report_box = gr.Markdown()
+                gr.Button("Load").click(report_ui, None, report_box)
 
     # ===== EVENTS =====
     login_btn.click(
@@ -125,5 +143,4 @@ with gr.Blocks() as app:
     )
 
 
-# ⚠️ Theme đặt ở launch (compatible mọi version)
 app.launch(theme=gr.themes.Soft())
