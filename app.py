@@ -35,6 +35,7 @@ def handle_login(u, p):
             msg,
             username,
             role,
+            menus,
             gr.update(visible=False),
             gr.update(visible=True),
         )
