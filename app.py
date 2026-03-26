@@ -108,21 +108,16 @@ with gr.Blocks() as app:
         with gr.Tabs():
 
             with gr.Tab("📥 Download"):
-                download_box = gr.Markdown()
-                gr.Button("Load").click(download_ui, None, download_box)
+                download_tab(state_logged_in, state_menus)
 
             with gr.Tab("🧩 Chunking"):
-                chunk_box = gr.Markdown()
-                gr.Button("Load").click(chunking_ui, None, chunk_box)
+                chunking_tab(state_logged_in, state_menus)
 
             with gr.Tab("💬 QA"):
-                qa_box = gr.Markdown()
-                gr.Button("Load").click(qa_ui, None, qa_box)
+                qa_tab(state_logged_in, state_menus, state_groups)
 
             with gr.Tab("📊 Report"):
-                report_box = gr.Markdown()
-                gr.Button("Load").click(report_ui, None, report_box)
-
+                report_tab(state_logged_in, state_menus)
     # ===== EVENTS =====
     login_btn.click(
         handle_login,
