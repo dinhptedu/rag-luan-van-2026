@@ -6,6 +6,9 @@ USERS = {
     "admin":  {"password": "Admin@2026", "role": "admin",  "groups": ["all"]},
     "guest1": {"password": "Guest1@2026","role": "guest",  "groups": ["Lao dong & BHXH"]},
     "guest2": {"password": "Guest2@2026","role": "guest",  "groups": ["Ngan hang & Tin dung"]},
+    # Them user moi o day:
+    'guest3': {'password': 'Guest3@2026','role': 'guest',  'groups': ['Doanh nghiep & Dau tu']},
+
 }
 
 ROLE_MENUS = {
